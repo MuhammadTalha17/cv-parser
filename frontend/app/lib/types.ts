@@ -1,4 +1,4 @@
-interface PersonalInfo {
+export interface PersonalInfo {
   name: string;
   email: string;
   phone: string;
@@ -37,7 +37,7 @@ export interface CVData {
   summary: string;
   education: Education[];
   experience: Experience[];
-  skills: string[];
+  skills: { name: string }[];
   languages: Language[];
-  cerfications: Certification[];
+  certifications: Certification[];
 }
