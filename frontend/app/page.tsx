@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import CVForm from "./components/CVForm";
 import { CVData } from "./lib/types";
 import axios from "axios";
+import Sidebar from "./components/Sidebar";
 
 export default function Home() {
   const [cvData, setCvData] = useState<CVData | null>(null);
@@ -37,7 +38,7 @@ export default function Home() {
       };
 
       setCvData(data);
-      setRawText(response.data.raw_text); // Store original text
+      setRawText(response.data.raw_text);
     } catch (error: any) {
       const message =
         error.response?.data?.detail || error.message || "Failed to parse CV";
@@ -73,75 +74,10 @@ export default function Home() {
     }
   };
 
-  const navItems = [
-    { href: "#home", label: "Home" },
-    { href: "#parse-cv", label: "Parse CV" },
-    { href: "#ats-result", label: "ATS Result" },
-  ];
-
   return (
     <div className="min-h-screen bg-[#ececec] text-[#141414]">
       <div className="lg:flex">
-        <aside className="hidden lg:flex lg:h-screen lg:w-72 lg:flex-col lg:justify-between lg:sticky lg:top-0 lg:border-r lg:border-white/10 lg:bg-black lg:p-6">
-          <div>
-            <p className="px-2 text-4xl font-black tracking-tight text-white">
-              CVParser
-            </p>
-
-            <nav className="mt-10 space-y-2">
-              {navItems.map((item, idx) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className={`block rounded-md px-4 py-3 text-sm font-semibold tracking-wide transition-colors ${
-                    idx === 0
-                      ? "bg-white/20 text-white"
-                      : "text-white/80 hover:bg-white/10 hover:text-white"
-                  }`}
-                >
-                  {item.label}
-                </a>
-              ))}
-            </nav>
-          </div>
-
-          <div className="space-y-3">
-            {/* <button
-              type="button"
-              onClick={openFilePicker}
-              disabled={loading}
-              className="w-full rounded-md bg-white px-4 py-3 text-sm font-semibold text-black transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-70 cursor-pointer"
-            >
-              {loading ? (
-                <span className="inline-flex items-center gap-2">
-                  <svg
-                    className="h-4 w-4 animate-spin"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v8H4z"
-                    />
-                  </svg>
-                  Parsing...
-                </span>
-              ) : (
-                "Upload CV"
-              )}
-            </button> */}
-          </div>
-        </aside>
+        <Sidebar />
 
         <main className="w-full px-5 py-6 lg:px-12 lg:py-10">
           <header className="mb-8 flex items-center justify-between rounded-xl border border-black/10 bg-black px-5 py-4 lg:hidden">
@@ -161,7 +97,7 @@ export default function Home() {
               CVParser
             </h1>
             <p className="mt-5 max-w-4xl text-3xl font-bold leading-tight sm:text-6xl">
-              A single API to extract data from CVs.
+              Extract data from CVs
             </p>
           </section>
 

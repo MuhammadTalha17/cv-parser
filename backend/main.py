@@ -2,7 +2,7 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from services.extractor import extract_text
-from services.gemini_service import parse_cv_with_gemini
+from services.gemini_service import parse_cv_with_gemini, calculate_ats_score
 from models import CV, create_db_and_tables, SessionDep
 
 app = FastAPI(title="CV Parser API")
@@ -18,6 +18,21 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.post("/api/ats-score")
+async def ats_score(data: dict):
+    raw_text = data.get("raw_text", "")
+    job_description = data.get("job_description", "")
+
+    if not raw_text or not job_description:
+        raise HTTPException(status_code=400, detail="Both Resume text and Job Description are required.")
+    
+    try:
+        result = calculate_ats_score(raw_text, job_description)
+        return {"success": True, "data": result}
+    except Exception as e:
+        print(f"ATS Score Error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/save-cv")
 async def save_cv(data: dict, session:SessionDep):

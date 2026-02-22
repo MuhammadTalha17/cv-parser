@@ -15,7 +15,7 @@ class CV(SQLModel, table=True):
     linkedin: str
     github: str
     summary: str
-    # We use Column(JSON) so SQLModel handles the conversion to/from strings for us!
+    #Column(JSON) so SQLModel handles the conversion to/from strings
     education: list = Field(default_factory=list, sa_column=Column(JSON))
     experience: list = Field(default_factory=list, sa_column=Column(JSON))
     skills: list = Field(default_factory=list, sa_column=Column(JSON))
@@ -23,8 +23,6 @@ class CV(SQLModel, table=True):
     certifications: list = Field(default_factory=list, sa_column=Column(JSON))
     raw_text: str = ""
 
-
-# --- POSTGRESQL CONFIG ---
 DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     raise ValueError("DATABASE_URL not found in .env file")

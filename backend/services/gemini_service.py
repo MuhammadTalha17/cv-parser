@@ -59,7 +59,7 @@ def parse_cv_with_gemini(raw_text: str) -> str:
         result_text = result_text.strip()
 
     try:
-        return json.loads(result_text) #json.loads() - to convert JSON string into python dict.
+        return json.loads(result_text) #json.loads() - for converting JSON string into python dict.
     except json.JSONDecodeError as e:
         print(f"JSON Decode Error: {e}")
         print(f"Raw response: {result_text}")
@@ -70,11 +70,11 @@ Compare the provided resume text with the job description.
 Provide a match score (0-100), a brief summary of the match, and 3 actionable tips to improve the resume for this specific role.
 
 Return only valid JSON(no markdown, no code blocks, no explanation) with this schema:
-{
+{{
   "score": number,
   "match_summary": "string",
   "tips": ["string", "string", "string"]
-}
+}}
 
 Resume Text:
 {resume_text}
@@ -88,7 +88,7 @@ def calculate_ats_score(cv_text: str, job_description: str) -> dict:
     prompt = ATS_PROMPT.format(resume_text=cv_text, job_description=job_description)
 
     response = client.models.generate_content(
-        model = "gemini-2.0-flash-lite",
+        model = "gemini-2.5-flash-lite",
         contents=prompt,
     )
 
