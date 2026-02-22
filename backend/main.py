@@ -39,4 +39,4 @@ async def parse_cv(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to parse CV with Gemini: {str(e)}")
         
-    return {"success": True, "data": parsed_data}            
+    return {"success": True, "data": parsed_data}

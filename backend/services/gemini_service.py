@@ -47,7 +47,7 @@ Resume Text:
 
 def parse_cv_with_gemini(raw_text: str) -> str:
     response = client.models.generate_content(
-        model = "gemini-3-flash-preview",
+        model = "gemini-2.5-flash-lite",
         contents = PROMPT + raw_text,
     )
 
@@ -59,7 +59,7 @@ def parse_cv_with_gemini(raw_text: str) -> str:
         result_text = result_text.strip()
 
     try:
-        return json.loads(result_text) #json.loads() converts JSON string into python dict.
+        return json.loads(result_text) #json.loads() - to convert JSON string into python dict.
     except json.JSONDecodeError as e:
         print(f"JSON Decode Error: {e}")
         print(f"Raw response: {result_text}")
