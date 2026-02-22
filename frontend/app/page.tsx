@@ -44,66 +44,250 @@ export default function Home() {
     }
   };
 
+  const openFilePicker = () => {
+    if (!loading) fileInputRef.current?.click();
+  };
+
+  const navItems = [
+    { href: "#home", label: "Home" },
+    { href: "#parse-cv", label: "Parse CV" },
+    { href: "#ats-result", label: "ATS Result" },
+  ];
+
   return (
-    <div className="min-h-screen bg-white">
-      <header className="border-b border-gray-200 py-6">
-        <h1 className="text-center text-2xl font-semibold tracking-tight text-black">
-          CV Parser
-        </h1>
-      </header>
-      <main className="max-w-2xl mx-auto px-6 py-12">
-        {/* Upload Area */}
-        <div className="border-2 border-dashed border-gray-300 rounded-xl p-12 flex flex-col items-center gap-4 text-center mb-6">
-          <p className="text-gray-400 text-sm">PDF or DOCX format supported</p>
-          <label
-            htmlFor="cv-upload"
-            className="cursor-pointer bg-black text-white text-sm font-medium px-6 py-3 rounded-lg hover:bg-zinc-800 transition-colors flex items-center gap-2"
-          >
-            {loading ? (
-              <>
-                <svg
-                  className="animate-spin h-4 w-4 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
+    <div className="min-h-screen bg-[#ececec] text-[#141414]">
+      <div className="lg:flex">
+        <aside className="hidden lg:flex lg:h-screen lg:w-72 lg:flex-col lg:justify-between lg:sticky lg:top-0 lg:border-r lg:border-white/10 lg:bg-black lg:p-6">
+          <div>
+            <p className="px-2 text-4xl font-black tracking-tight text-white">
+              CVParser
+            </p>
+
+            <nav className="mt-10 space-y-2">
+              {navItems.map((item, idx) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className={`block rounded-md px-4 py-3 text-sm font-semibold tracking-wide transition-colors ${
+                    idx === 0
+                      ? "bg-white/20 text-white"
+                      : "text-white/80 hover:bg-white/10 hover:text-white"
+                  }`}
                 >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v8H4z"
-                  />
-                </svg>
-                Parsing...
-              </>
-            ) : (
-              "Upload CV"
-            )}
-            <input
-              ref={fileInputRef}
-              id="cv-upload"
-              type="file"
-              accept=".pdf,.docx"
-              onChange={handleFileUpload}
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+          </div>
+
+          <div className="space-y-3">
+            {/* <button
+              type="button"
+              onClick={openFilePicker}
               disabled={loading}
-              className="hidden"
-            />
-          </label>
-        </div>
-        {/* Error State */}
-        {error && (
-          <p className="text-red-500 text-sm text-center mb-6">{error}</p>
-        )}
-        {/* CV Form */}
-        {cvData && <CVForm data={cvData} />}
-      </main>
+              className="w-full rounded-md bg-white px-4 py-3 text-sm font-semibold text-black transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-70 cursor-pointer"
+            >
+              {loading ? (
+                <span className="inline-flex items-center gap-2">
+                  <svg
+                    className="h-4 w-4 animate-spin"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8H4z"
+                    />
+                  </svg>
+                  Parsing...
+                </span>
+              ) : (
+                "Upload CV"
+              )}
+            </button> */}
+          </div>
+        </aside>
+
+        <main className="w-full px-5 py-6 lg:px-12 lg:py-10">
+          <header className="mb-8 flex items-center justify-between rounded-xl border border-black/10 bg-black px-5 py-4 lg:hidden">
+            <p className="text-xl font-black text-white">CVParser</p>
+            <button
+              type="button"
+              onClick={openFilePicker}
+              disabled={loading}
+              className="rounded-md bg-white px-4 py-2 text-sm font-semibold text-black disabled:opacity-70"
+            >
+              {loading ? "Parsing..." : "Upload CV"}
+            </button>
+          </header>
+
+          <section id="home" className="mb-10">
+            <h1 className="text-5xl font-black tracking-tight sm:text-7xl">
+              CVParser
+            </h1>
+            <p className="mt-5 max-w-4xl text-3xl font-bold leading-tight sm:text-6xl">
+              A single API to extract data from CVs.
+            </p>
+          </section>
+
+          <section
+            id="parse-cv"
+            className="mb-10 rounded-2xl border border-black/10 bg-white p-6 sm:p-8"
+          >
+            <p className="mb-4 text-lg font-bold">CV Upload</p>
+
+            <label
+              htmlFor="cv-upload"
+              className={`block rounded-2xl border-2 border-dashed p-10 text-center transition-colors ${
+                loading
+                  ? "cursor-not-allowed border-black/30 bg-[#ececec]"
+                  : "cursor-pointer border-black/20 bg-[#f4f4f4] hover:border-black/40"
+              }`}
+            >
+              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-black/10 bg-white text-xl font-bold">
+                {loading ? (
+                  <svg
+                    className="h-5 w-5 animate-spin"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8H4z"
+                    />
+                  </svg>
+                ) : (
+                  "↑"
+                )}
+              </div>
+
+              <p className="text-3xl font-black tracking-tight">
+                {loading ? "Parsing your resume..." : "Drag & drop your resume"}
+              </p>
+              <p className="mt-2 text-base text-black/60">
+                {loading
+                  ? "Please wait while we extract data from your CV."
+                  : "Or click to browse - PDF and DOCX are supported."}
+              </p>
+
+              <input
+                ref={fileInputRef}
+                id="cv-upload"
+                type="file"
+                accept=".pdf,.docx"
+                onChange={handleFileUpload}
+                disabled={loading}
+                className="hidden"
+              />
+            </label>
+
+            {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+          </section>
+
+          <section
+            id="ats-result"
+            className="rounded-2xl border border-black/10 bg-white p-6 sm:p-8"
+          >
+            <div className="mb-1 flex items-center justify-between">
+              {/* { <h2 className="text-xl font-black tracking-tight">ATS Result</h2>}
+              <span className="rounded-full border border-black/15 px-3 py-1 text-xs font-semibold">
+                Structured Data
+              </span> */}
+            </div>
+
+            {cvData ? (
+              <CVForm data={cvData} />
+            ) : (
+              <p className="text-sm text-center text-black/60">
+                Upload a CV above to see extracted data here.
+              </p>
+            )}
+          </section>
+        </main>
+      </div>
     </div>
   );
+
+  // return (
+  //   <div className="min-h-screen bg-white">
+  //     <header className="border-b border-gray-200 py-6">
+  //       <h1 className="text-center text-2xl font-semibold tracking-tight text-black">
+  //         CV Parser
+  //       </h1>
+  //     </header>
+  //     <main className="max-w-2xl mx-auto px-6 py-12">
+  //       {/* Upload Area */}
+  //       <div className="border-2 border-dashed border-gray-300 rounded-xl p-12 flex flex-col items-center gap-4 text-center mb-6">
+  //         <p className="text-gray-400 text-sm">PDF or DOCX format supported</p>
+  //         <label
+  //           htmlFor="cv-upload"
+  //           className="cursor-pointer bg-black text-white text-sm font-medium px-6 py-3 rounded-lg hover:bg-zinc-800 transition-colors flex items-center gap-2"
+  //         >
+  //           {loading ? (
+  //             <>
+  //               <svg
+  //                 className="animate-spin h-4 w-4 text-white"
+  //                 xmlns="http://www.w3.org/2000/svg"
+  //                 fill="none"
+  //                 viewBox="0 0 24 24"
+  //               >
+  //                 <circle
+  //                   className="opacity-25"
+  //                   cx="12"
+  //                   cy="12"
+  //                   r="10"
+  //                   stroke="currentColor"
+  //                   strokeWidth="4"
+  //                 />
+  //                 <path
+  //                   className="opacity-75"
+  //                   fill="currentColor"
+  //                   d="M4 12a8 8 0 018-8v8H4z"
+  //                 />
+  //               </svg>
+  //               Parsing...
+  //             </>
+  //           ) : (
+  //             "Upload CV"
+  //           )}
+  //           <input
+  //             ref={fileInputRef}
+  //             id="cv-upload"
+  //             type="file"
+  //             accept=".pdf,.docx"
+  //             onChange={handleFileUpload}
+  //             disabled={loading}
+  //             className="hidden"
+  //           />
+  //         </label>
+  //       </div>
+  //       {/* Error State */}
+  //       {error && (
+  //         <p className="text-red-500 text-sm text-center mb-6">{error}</p>
+  //       )}
+  //       {/* CV Form */}
+  //       {cvData && <CVForm data={cvData} />}
+  //     </main>
+  //   </div>
+  // );
 }
