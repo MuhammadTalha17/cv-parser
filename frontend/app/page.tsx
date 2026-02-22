@@ -10,6 +10,9 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  //coming from gemini model
+  const [rawText, setRawText] = useState<string | null>(null);
+  const [saveLoading, setSaveLoading] = useState(false);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -34,6 +37,7 @@ export default function Home() {
       };
 
       setCvData(data);
+      setRawText(response.data.raw_text); // Store original text
     } catch (error: any) {
       const message =
         error.response?.data?.detail || error.message || "Failed to parse CV";
@@ -46,6 +50,27 @@ export default function Home() {
 
   const openFilePicker = () => {
     if (!loading) fileInputRef.current?.click();
+  };
+
+  const handleSaveToDb = async () => {
+    if (!cvData || !rawText) return;
+
+    setSaveLoading(true);
+
+    try {
+      const response = await axios.post("http://localhost:8000/api/save-cv", {
+        ...cvData,
+        raw_text: rawText,
+      });
+      if (response.data) {
+        alert("CV saved to database!");
+      }
+      console.log("response:", response.data);
+    } catch (err: any) {
+      setError(err.response?.data?.detail || "Failed to save CV");
+    } finally {
+      setSaveLoading(false);
+    }
   };
 
   const navItems = [
@@ -208,12 +233,22 @@ export default function Home() {
             id="ats-result"
             className="rounded-2xl border border-black/10 bg-white p-6 sm:p-8"
           >
-            <div className="mb-1 flex items-center justify-between">
-              {/* { <h2 className="text-xl font-black tracking-tight">ATS Result</h2>}
+            {/* <div className="mb-1 flex items-center justify-between">
+              { <h2 className="text-xl font-black tracking-tight">ATS Result</h2>}
               <span className="rounded-full border border-black/15 px-3 py-1 text-xs font-semibold">
                 Structured Data
-              </span> */}
-            </div>
+              </span>
+            </div> */}
+
+            {cvData && (
+              <button
+                onClick={handleSaveToDb}
+                disabled={saveLoading}
+                className="rounded-md bg-black px-4 py-2 text-xs font-bold text-white transition-opacity hover:opacity-80 disabled:opacity-50"
+              >
+                {saveLoading ? "Saving..." : "Save to Database"}
+              </button>
+            )}
 
             {cvData ? (
               <CVForm data={cvData} />
@@ -227,67 +262,4 @@ export default function Home() {
       </div>
     </div>
   );
-
-  // return (
-  //   <div className="min-h-screen bg-white">
-  //     <header className="border-b border-gray-200 py-6">
-  //       <h1 className="text-center text-2xl font-semibold tracking-tight text-black">
-  //         CV Parser
-  //       </h1>
-  //     </header>
-  //     <main className="max-w-2xl mx-auto px-6 py-12">
-  //       {/* Upload Area */}
-  //       <div className="border-2 border-dashed border-gray-300 rounded-xl p-12 flex flex-col items-center gap-4 text-center mb-6">
-  //         <p className="text-gray-400 text-sm">PDF or DOCX format supported</p>
-  //         <label
-  //           htmlFor="cv-upload"
-  //           className="cursor-pointer bg-black text-white text-sm font-medium px-6 py-3 rounded-lg hover:bg-zinc-800 transition-colors flex items-center gap-2"
-  //         >
-  //           {loading ? (
-  //             <>
-  //               <svg
-  //                 className="animate-spin h-4 w-4 text-white"
-  //                 xmlns="http://www.w3.org/2000/svg"
-  //                 fill="none"
-  //                 viewBox="0 0 24 24"
-  //               >
-  //                 <circle
-  //                   className="opacity-25"
-  //                   cx="12"
-  //                   cy="12"
-  //                   r="10"
-  //                   stroke="currentColor"
-  //                   strokeWidth="4"
-  //                 />
-  //                 <path
-  //                   className="opacity-75"
-  //                   fill="currentColor"
-  //                   d="M4 12a8 8 0 018-8v8H4z"
-  //                 />
-  //               </svg>
-  //               Parsing...
-  //             </>
-  //           ) : (
-  //             "Upload CV"
-  //           )}
-  //           <input
-  //             ref={fileInputRef}
-  //             id="cv-upload"
-  //             type="file"
-  //             accept=".pdf,.docx"
-  //             onChange={handleFileUpload}
-  //             disabled={loading}
-  //             className="hidden"
-  //           />
-  //         </label>
-  //       </div>
-  //       {/* Error State */}
-  //       {error && (
-  //         <p className="text-red-500 text-sm text-center mb-6">{error}</p>
-  //       )}
-  //       {/* CV Form */}
-  //       {cvData && <CVForm data={cvData} />}
-  //     </main>
-  //   </div>
-  // );
 }
