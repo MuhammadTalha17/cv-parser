@@ -38,6 +38,8 @@ export default function Home() {
       };
 
       setCvData(data);
+      handleSaveToDb();
+
       setRawText(response.data.raw_text);
     } catch (error: any) {
       const message =
@@ -143,12 +145,12 @@ export default function Home() {
               </div>
 
               <p className="text-3xl font-black tracking-tight">
-                {loading ? "Parsing your resume..." : "Drag & drop your resume"}
+                {loading ? "Parsing your resume..." : "Click to Upload CV"}
               </p>
               <p className="mt-2 text-base text-black/60">
                 {loading
                   ? "Please wait while we extract data from your CV."
-                  : "Or click to browse - PDF and DOCX are supported."}
+                  : "PDF and DOCX are supported."}
               </p>
 
               <input
@@ -175,16 +177,6 @@ export default function Home() {
                 Structured Data
               </span>
             </div> */}
-
-            {cvData && (
-              <button
-                onClick={handleSaveToDb}
-                disabled={saveLoading}
-                className="rounded-md bg-black px-4 py-2 text-xs font-bold text-white transition-opacity hover:opacity-80 disabled:opacity-50"
-              >
-                {saveLoading ? "Saving..." : "Save to Database"}
-              </button>
-            )}
 
             {cvData ? (
               <CVForm data={cvData} />

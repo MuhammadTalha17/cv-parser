@@ -189,15 +189,6 @@ export default function ATSPage() {
                     </p>
                   </div>
 
-                  <div className="mb-8 rounded-xl border border-black/5 bg-[#f4f4f4] p-6 shadow-sm">
-                    <h3 className="mb-2 text-[10px] font-black uppercase tracking-widest text-black/40">
-                      Executive Summary
-                    </h3>
-                    <p className="text-lg font-bold leading-snug italic text-black/80">
-                      "{atsResult.match_summary}"
-                    </p>
-                  </div>
-
                   <div>
                     <h3 className="mb-4 text-[10px] font-black uppercase tracking-widest text-black/40">
                       Critical Improvements

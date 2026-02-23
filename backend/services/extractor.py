@@ -1,4 +1,4 @@
-import fitz #PyMuPDF
+import fitz #pymupdf
 from docx import Document
 import os
 import io
@@ -8,32 +8,24 @@ from docling.document_converter import DocumentConverter
 _converter = DocumentConverter() #instantiate DocumentConverter, once at module load
 
 def extract_text(file_bytes: str, extension: str) -> str:
-    """Extract text from PDF or DOCX using docling."""
     tmp_path = None
     try:
-        # Docling requires a file path, not bytes — so we write to a temp file
+        #Docling requires a file path, not bytes like pymupdf.
         suffix = f".{extension}"
         with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
             tmp.write(file_bytes)
-            tmp_path = tmp.name # store the path
+            tmp_path = tmp.name
         
-        result = _converter.convert(tmp_path) # docling parses the file
-        return result.document.export_to_markdown() # output as clean Markdown
+        result = _converter.convert(tmp_path) #file parsing
+        return result.document.export_to_markdown() #clean markdown output
 
     except Exception as e:
         print(f"Error extracting text from {extension.upper()}: {e}")
         raise
     finally:
-        # Cleanup temp file
-        if tmp_path and os.path.exists(tmp_path): # always delete temp file
+        #delete temp file
+        if tmp_path and os.path.exists(tmp_path):
             os.remove(tmp_path)
-
-
-
-
-
-
-
 
 # def extract_text_from_pdf(file_bytes: bytes) -> str:
 #     try:

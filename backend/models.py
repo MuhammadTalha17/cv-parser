@@ -9,13 +9,13 @@ load_dotenv()
 class CV(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str
-    email: str
+    email: str = Field(unique=True, index=True)
     phone: str
     address: str
     linkedin: str
     github: str
     summary: str
-    #Column(JSON) so SQLModel handles the conversion to/from strings
+    #Column(JSON) helps in converting lists to/from strings
     education: list = Field(default_factory=list, sa_column=Column(JSON))
     experience: list = Field(default_factory=list, sa_column=Column(JSON))
     skills: list = Field(default_factory=list, sa_column=Column(JSON))

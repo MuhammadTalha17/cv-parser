@@ -37,7 +37,6 @@ async def ats_score(data: dict):
 @app.post("/api/save-cv")
 async def save_cv(data: dict, session:SessionDep):
     try:
-        # We can pass lists directly because we used Column(JSON) in models.py!
         new_cv = CV(
             name=data["personal_info"].get("name", ""),
             email=data["personal_info"].get("email", ""),
@@ -70,7 +69,7 @@ async def parse_cv(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="No file uploaded")
     extension = file.filename.rsplit(".", 1)[-1].lower()
     if extension not in ["pdf", "docx"]:
-        raise HTTPException(status_code=400, detail="Unsupported file type. Please uplaod a PDF or DOCX file",)
+        raise HTTPException(status_code=400, detail="Unsupported file type. Please upload a PDF or DOCX file",)
 
     #read file bytes
     file_bytes = await file.read()

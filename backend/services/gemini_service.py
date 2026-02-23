@@ -47,7 +47,7 @@ Resume Text:
 
 def parse_cv_with_gemini(raw_text: str) -> str:
     response = client.models.generate_content(
-        model = "gemini-2.5-flash-lite",
+        model = "gemini-flash-latest",
         contents = PROMPT + raw_text,
     )
 
