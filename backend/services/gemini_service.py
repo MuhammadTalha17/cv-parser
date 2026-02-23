@@ -84,7 +84,6 @@ Job Description:
  """
 
 def calculate_ats_score(cv_text: str, job_description: str) -> dict:
-    # 1. Format the prompt with the actual CV and Job Desc
     prompt = ATS_PROMPT.format(resume_text=cv_text, job_description=job_description)
 
     response = client.models.generate_content(
@@ -92,7 +91,6 @@ def calculate_ats_score(cv_text: str, job_description: str) -> dict:
         contents=prompt,
     )
 
-     # 3. Clean and parse the JSON response
     result_text = response.text.strip()
     if result_text.startswith("```"):
         result_text = result_text.split("\n", 1)[1]

@@ -38,7 +38,7 @@ export default function Home() {
       };
 
       setCvData(data);
-      handleSaveToDb();
+      await handleSaveToDb();
 
       setRawText(response.data.raw_text);
     } catch (error: any) {
@@ -65,9 +65,9 @@ export default function Home() {
         ...cvData,
         raw_text: rawText,
       });
-      if (response.data) {
-        alert("CV saved to database!");
-      }
+      // if (response.data) {
+      //   alert("CV saved to database!");
+      // }
       console.log("response:", response.data);
     } catch (err: any) {
       setError(err.response?.data?.detail || "Failed to save CV");
